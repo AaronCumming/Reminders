@@ -1,22 +1,21 @@
-"""
-URL configuration for backend project.
+# reminders/urls.py
+# Matthew Kruse
+# URLs for Event, Reminder
+# 11 April 2025
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
+from reminders.views import EventListCreate, EventRetrieveUpdateDestroy, ReminderListCreate, ReminderRetrieveUpdateDestroy
 
+# Base urls
 urlpatterns = [
     path('admin/', admin.site.urls),
+]
+
+# Appended list of api endpoints
+urlpatterns += [
+    path('api/events', EventListCreate.as_view(), name='event-list-create'),
+    path('api/events/<int:pk>/', EventRetrieveUpdateDestroy.as_view(), name='event-retrieve-update-destroy'),
+    path('api/reminders', ReminderListCreate.as_view(), name='reminder-list-create'),
+    path('api/reminders/<int:pk>/', ReminderRetrieveUpdateDestroy.as_view(), name='reminder-retrieve-update-destroy'),
 ]
