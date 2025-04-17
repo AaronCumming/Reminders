@@ -1,9 +1,9 @@
 # reminders/views.py
 # Matthew Kruse
 # Views for Event, Reminder, with date plus start_date and end_date filtering
-# 12 April 2025
+# 16 April 2025
 
-from rest_framework import generics, serializers, status
+from rest_framework import generics, serializers, status, viewsets
 from rest_framework.response import Response
 from reminders.models import Reminder, Event
 from reminders.serializers import ReminderSerializer, EventSerializer
@@ -13,7 +13,7 @@ from django.utils.timezone import is_naive, make_aware
 import pytz
 
 
-class EventListCreate(generics.ListCreateAPIView):
+class EventListCreate(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
@@ -67,15 +67,8 @@ class EventListCreate(generics.ListCreateAPIView):
         except Exception as e:
             return Response({'detail': 'An error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class EventRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
 
-    def get_queryset(self):
-        return Event.objects
-
-
-class ReminderListCreate(generics.ListCreateAPIView):
+class ReminderListCreate(viewsets.ModelViewSet):
     queryset = Reminder.objects.all()
     serializer_class = ReminderSerializer
 
@@ -121,9 +114,4 @@ class ReminderListCreate(generics.ListCreateAPIView):
 
         return queryset
 
-class ReminderRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Reminder.objects.all()
-    serializer_class = ReminderSerializer
-
-    def get_queryset(self):
-        return Reminder.objects
+ 
