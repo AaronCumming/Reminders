@@ -18,7 +18,7 @@ class EventSerializer(serializers.ModelSerializer):
 # set reminder fields displayed to client
 class ReminderSerializer(serializers.ModelSerializer):
     remind_time = serializers.DateTimeField()
-    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+    event = EventSerializer(read_only = True)
 
     class Meta:
         model = Reminder
