@@ -18,10 +18,10 @@ class EventListCreate(viewsets.ModelViewSet):
     serializer_class = EventSerializer
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('event_time')
-        date = self.request.query_params.get('date')
-        start_date = self.request.query_params.get('start_date')
-        end_date = self.request.query_params.get('end_date')
+        queryset = super().get_queryset().order_by("event_time")
+        date = self.request.query_params.get("date")
+        start_date = self.request.query_params.get("start_date")
+        end_date = self.request.query_params.get("end_date")
 
         # filter by specific date if date param is provided by the client
         if date:
@@ -53,7 +53,9 @@ class EventListCreate(viewsets.ModelViewSet):
                     end_datetime = make_aware(end_datetime, pytz.UTC)
 
                 # filter reminders
-                queryset = queryset.filter(event_time__gte=start_datetime, event_time__lte=end_datetime)
+                queryset = queryset.filter(
+                    event_time__gte=start_datetime, event_time__lte=end_datetime
+                )
 
             except ValueError:
                 pass
@@ -65,7 +67,10 @@ class EventListCreate(viewsets.ModelViewSet):
         except serializers.ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'detail': 'An error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"detail": "An error occurred."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 
 class ReminderListCreate(viewsets.ModelViewSet):
@@ -73,10 +78,10 @@ class ReminderListCreate(viewsets.ModelViewSet):
     serializer_class = ReminderSerializer
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('remind_time')
-        date = self.request.query_params.get('date')
-        start_date = self.request.query_params.get('start_date')
-        end_date = self.request.query_params.get('end_date')
+        queryset = super().get_queryset().order_by("remind_time")
+        date = self.request.query_params.get("date")
+        start_date = self.request.query_params.get("start_date")
+        end_date = self.request.query_params.get("end_date")
 
         # filter by specific date if date param is provided by the client
         if date:
@@ -107,11 +112,11 @@ class ReminderListCreate(viewsets.ModelViewSet):
                     end_datetime = make_aware(end_datetime, pytz.UTC)
 
                 # filter reminders
-                queryset = queryset.filter(remind_time__gte=start_datetime, remind_time__lte=end_datetime)
+                queryset = queryset.filter(
+                    remind_time__gte=start_datetime, remind_time__lte=end_datetime
+                )
 
             except ValueError:
                 pass
 
         return queryset
-
- 

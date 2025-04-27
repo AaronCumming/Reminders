@@ -10,6 +10,7 @@ import "../App.css";
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getEvents, getReminders } from "../data/reminders";
+import { EditReminders } from "../components/EditReminders";
 
 // Returns a list of events by key/value pairs by date: e.g. 4/12/25: [Event A, Event B]
 const eventsByDate = (events) => {
@@ -101,7 +102,7 @@ export function Home_Events() {
 }
 
 export function Home_Reminders() {
- const { isLoading, isError, data, error } = useQuery({
+ const { isLoading, isError, data, error, refetch } = useQuery({
   queryKey: ["reminders"],
   queryFn: getReminders,
  });
@@ -144,8 +145,12 @@ export function Home_Reminders() {
        }}
       >
        <span>{new Date(reminder.remind_time).toLocaleTimeString()}</span>
-       <span>    </span>
        <span>{reminder.event.name}</span>
+       <span>{new Date(reminder.remind_time).toLocaleTimeString()}</span>
+        <EditReminders 
+        reminder={reminder} 
+        onSave={() => refetch()} 
+        />
       </div>
      ))}
     </div>
