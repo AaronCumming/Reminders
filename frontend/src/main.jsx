@@ -1,9 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import {Home, Home_Events, Home_Reminders} from './pages/Home.jsx'
+import {Home_Events} from './pages/Home.jsx'
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from 'react-router';
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -14,11 +13,9 @@ createRoot(document.getElementById("root")).render(
 		<QueryClientProvider client={client}>
 			<BrowserRouter>
 				<Routes>
-          <Route path="/" element={<Home/>} />
+		          <Route path="/" element={<Home_Events/>} />
 				</Routes>
 			</BrowserRouter>
 		</QueryClientProvider>
 	</StrictMode>,
 );
-
-//<Route path="/tasks/create" element={<TaskCreate />} />

@@ -1,7 +1,7 @@
 # reminders/forms.py
 # Matthew Kruse
 # Serializers for Event, Reminder
-# 11 April 2025
+# 26 April 2025
 
 from rest_framework import serializers
 from .models import Event, Reminder
@@ -18,9 +18,13 @@ class EventSerializer(serializers.ModelSerializer):
 # set reminder fields displayed to client
 class ReminderSerializer(serializers.ModelSerializer):
     remind_time = serializers.DateTimeField()
-    event = EventSerializer(read_only = True)
 
+    # Make event read_only while event id is write-only
+    event = EventSerializer(read_only=True)
+    event_id = serializers.PrimaryKeyRelatedField(
+        queryset=Event.objects.all(), source='event', write_only=True
+    )
     class Meta:
         model = Reminder
-        fields = ('id', 'event', 'remind_time')
+        fields = ('id', 'event', 'event_id', 'remind_time')
         read_only_fields = ()

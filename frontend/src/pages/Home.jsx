@@ -2,161 +2,186 @@
  * Home.jsx
  * Aaron Cumming, Matthew Kruse
  *
- * Displays all reminders
+ * Displays all events (POC with React Portal for Modals)
  *------------------------------------------------------------**/
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import "../App.css";
-import { Link } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { getEvents, getReminders } from "../data/reminders";
 
-// Returns a list of events by key/value pairs by date: e.g. 4/12/25: [Event A, Event B]
+import { useEventList, useEventMutations } from "../hooks/UseEvents";
+import { useReminderList } from "../hooks/UseReminders";
+import EventModal from "./EventModal";
+
+// Dynamically create the modal root if it doesn't already exist
+const createModalRoot = () => {
+  const modalRoot = document.createElement("div");
+  modalRoot.setAttribute("id", "modal-root");
+  document.body.appendChild(modalRoot);
+};
+
+// Returns a list of events by key/value pairs by date
 const eventsByDate = (events) => {
- return events.reduce((acc, event) => {
-  const date = new Date(event.event_time).toLocaleDateString();
-
-  // set accumulator if missing
-  if (!acc[date]) {
-   acc[date] = [];
-  }
-  // append event to accumulator
-  acc[date].push(event);
-  return acc;
- }, {});
+  return events.reduce((acc, event) => {
+    const date = new Date(event.event_time).toLocaleDateString();
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(event);
+    return acc;
+  }, {});
 };
 
-// Returns a list of reminders by key/value pairs by date: e.g. 4/12/25: [Reminder A, Reminder B]
-const remindersByDate = (reminders) => {
- return reminders.reduce((acc, reminder) => {
-  const date = new Date(reminder.remind_time).toLocaleDateString();
-
-  // set accumulator if missing
-  if (!acc[date]) {
-   acc[date] = [];
-  }
-  // append reminder to accumulator
-  acc[date].push(reminder);
-  return acc;
- }, {});
-};
-
-// This page makes use of the conditional rendering pattern
-// to handle different data fetching states, such as:
-// - Loading
-// - Error
-// - Success
 export function Home_Events() {
- const { isLoading, isError, data, error } = useQuery({
-  queryKey: ["events"],
-  queryFn: getEvents,
- });
+
+  useEffect(() => {
+    // Ensure modal root exists in DOM
+    const existingModalRoot = document.getElementById("modal-root");
+    if (!existingModalRoot) {
+      createModalRoot();
+    }
+  }, []);
+
+  const { events = [], isLoading: isEventsLoading, isError: isEventsError, error: eventsError } = useEventList();
+  const { reminders, isLoading: isRemindersLoading, isError: isRemindersError, error: remindersError } = useReminderList();
+  const { createEvent, editEvent, deleteEvent } = useEventMutations();
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [eventReminders, setEventReminders] = useState([]);
+  const [isInsertMode, setIsInsertMode] = useState(false);
+
+  // save event handler
+  const handleSaveEvent = (eventData) => {
+    if (isInsertMode) {
+      createEvent.mutate(eventData, {
+        onSuccess: () => {
+          console.log("New event created successfully");
+          closeModal();
+        },
+        onError: (error) => {
+          console.error("Failed to create event:", error.message);
+        },
+      });
+    } else {
+      editEvent.mutate(eventData, {
+        onSuccess: () => {
+          console.log("Event updated successfully");
+          closeModal();
+        },
+        onError: (error) => {
+          console.error("Failed to update event:", error.message);
+        },
+      });
+    }
+  };
+
+  // delete event handler
+  const handleDeleteEvent = (eventId) => {
+    deleteEvent.mutate(eventId, {
+      onSuccess: () => {
+        console.log("Event deleted successfully");
+        closeModal();
+      },
+      onError: (error) => {
+        console.error("Failed to delete event:", error.message);
+      },
+    });
+  };
+
+  // close modal handler
+  const closeModal = () => {
+    setSelectedEvent(null);
+    setIsInsertMode(false);
+    setEventReminders([]);
+  };
 
 
- if (isLoading) {
+  useEffect(() => {
+    if (selectedEvent && reminders) {
+      const remindersForEvent = reminders.filter(
+          (reminder) => reminder.event?.id === selectedEvent.id
+      );
+      setEventReminders(remindersForEvent);
+    } else {
+      setEventReminders([]);
+    }
+  }, [selectedEvent, reminders]);
+
+  if (isEventsLoading || isRemindersLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (isEventsError || isRemindersError) {
+    return (
+        <>
+          <h1>Error!</h1>
+          <p>{eventsError?.message || remindersError?.message}</p>
+        </>
+    );
+  }
+
+  const groupedEvents = eventsByDate(events);
+
   return (
-   <>
-    <h1>Loading...</h1>
-   </>
+      <>
+        <div>
+          <h1>
+            Events
+            <span className="plus-button"
+                  onClick={() => {
+                    setIsInsertMode(true);
+                    setSelectedEvent({name: "", event_time: new Date().toISOString()});
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = 'blue';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = 'black';
+                  }}
+            >
+            +
+            </span>
+          </h1>
+        </div>
+        {Object.keys(groupedEvents).map((date) => (
+            <div key={date}>
+              <h2>{date}</h2>
+              <hr/>
+              {groupedEvents[date].map((event) => (
+                  <div className="event"
+                       key={event.id}
+                  >
+                    <div className="event" key={event.id}>
+                      <span>
+                        {new Date(event.event_time).toLocaleTimeString()}
+                      </span>
+                      <span>
+                        <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setSelectedEvent(event);
+                              setIsInsertMode(false);
+                            }}
+                        >
+                          {event.name}
+                        </a>
+                      </span>
+                    </div>
+                  </div>
+              ))}
+            </div>
+        ))}
+        {selectedEvent &&
+            ReactDOM.createPortal(
+                <EventModal
+                    event={selectedEvent}
+                    reminders={eventReminders}
+                    onClose={closeModal}
+                    onSaveEvent={handleSaveEvent}
+                    onDeleteEvent={handleDeleteEvent}
+                />,
+                document.getElementById("modal-root")
+            )}
+      </>
   );
- }
-
- if (isError) {
-  return (
-   <>
-    <h1>Uh Oh!</h1>
-    <p>{error.message}</p>
-   </>
-  );
- }
-
- // Group events by date
- const groupedEvents = eventsByDate(data);
-
- return (
-  <>
-   <h1>Events</h1>
-   {Object.keys(groupedEvents).map((date) => (
-    <div key={date}>
-     <h2>{date}</h2>
-     <hr/>
-     {groupedEvents[date].map((event) => (
-      <div
-       key={event.id}
-       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: "10px",
-       }}
-      >
-       <span>{new Date(event.event_time).toLocaleTimeString()}</span>
-       <span>    </span>
-       <span>{event.name}</span>
-      </div>
-     ))}
-    </div>
-   ))}
-  </>
- );
-}
-
-export function Home_Reminders() {
- const { isLoading, isError, data, error } = useQuery({
-  queryKey: ["reminders"],
-  queryFn: getReminders,
- });
-
-
- if (isLoading) {
-  return (
-   <>
-    <h1>Loading...</h1>
-   </>
-  );
- }
-
- if (isError) {
-  return (
-   <>
-    <h1>Uh Oh!</h1>
-    <p>{error.message}</p>
-   </>
-  );
- }
-
- // Group events by date
- const groupedReminders = remindersByDate(data);
-
- return (
-  <>
-   <h1>Reminders</h1>
-   {Object.keys(groupedReminders).map((date) => (
-    <div key={date}>
-     <h2>{date}</h2>
-     <hr/>
-     {groupedReminders[date].map((reminder) => (
-      <div
-       key={reminder.id}
-       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: "10px",
-       }}
-      >
-       <span>{new Date(reminder.remind_time).toLocaleTimeString()}</span>
-       <span>    </span>
-       <span>{reminder.event.name}</span>
-      </div>
-     ))}
-    </div>
-   ))}
-  </>
- );
-}
-
-export function Home() {
- return<>
-  <Home_Events/>
-  <Home_Reminders/>
- </>
 }
