@@ -2,7 +2,7 @@
 
 ## Description
 
-This reminders app is a small, sweet, easy to use application to save a list of events and to create reminders for them. The events are grouped and sorted by Date/Time, with the ability to edit and attach reminders to them by clicking on the event name.  To retain context, the active event name is always displayed in a non-cluttered way, whether accessing the the Edit Event Modal, or the DateTimePicker modal which comes to the forefront. 
+This reminders app is a small, easy to use application to save a list of events and to create reminders for them. The events are grouped and sorted by Date/Time, with the ability to edit and attach reminders to them by clicking on the event name.  To retain context, the active event name is always displayed in a non-cluttered way, whether accessing the the Edit Event Modal, or the DateTimePicker modal which comes to the forefront. 
 
 ## Features Implemented
 
@@ -127,3 +127,13 @@ This project requires setting up both a backend with Django and a frontend with 
 6. Add configurable timezone settings
 
 ---
+
+## Contacts
+ 
+- Aaron Cumming
+ 
+- Matthew Kruse
+ 
+- Brodie Rogers
+ 
+To suggest a feature or submit an issue, [use this link](https://github.com/AaronCumming/Reminders/issues)
