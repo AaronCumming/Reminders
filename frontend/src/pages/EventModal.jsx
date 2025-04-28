@@ -95,17 +95,16 @@ const EventModal = ({ event, reminders, onClose, onSaveEvent, onDeleteEvent }) =
   return ReactDOM.createPortal(
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{event.id ? "Edit Event" : "Add New Event"}</h2>
+        <h2 className="modalHeading">{event.id ? "Edit Event" : "Add New Event"}</h2>
 
         {/* Form Container */}
         <div className="form-container">
           <div className="form-row">
             <label className="form-label">Name:</label>
-            <input
+            <input id="name-input"
               type="text"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              className="form-input"
             />
           </div>
 
@@ -120,7 +119,7 @@ const EventModal = ({ event, reminders, onClose, onSaveEvent, onDeleteEvent }) =
                 setShowDateTimeModal(true);
                 setEditing('event');
               }}
-              className="form-link"
+              className="form-link" id="date-link"
             >
               {new Date(eventTime).toLocaleString()}
             </a>
@@ -132,10 +131,8 @@ const EventModal = ({ event, reminders, onClose, onSaveEvent, onDeleteEvent }) =
           <h3>
             Reminders
             <span
-              className="plus-button"
+              className="plus-button" id="add-reminder-span"
               onClick={handleAddReminderClick}
-              onMouseEnter={(e) => (e.target.style.color = 'blue')}
-              onMouseLeave={(e) => (e.target.style.color = 'black')}
             >
             +
             </span>
@@ -144,9 +141,9 @@ const EventModal = ({ event, reminders, onClose, onSaveEvent, onDeleteEvent }) =
 
         <div>
           {reminders && reminders.length > 0 ? (
-            <ul>
+            <ul className="reminder-list">
               {reminders.map((reminder) => (
-                <li key={reminder.id}>
+                <li className="reminder" key={reminder.id}>
                   {new Date(reminder.remind_time).toLocaleString()}
                   <button
                     onClick={() => {
@@ -168,14 +165,14 @@ const EventModal = ({ event, reminders, onClose, onSaveEvent, onDeleteEvent }) =
         </div>
 
         {/* Save, Delete & Cancel Buttons */}
-        <button onClick={handleSaveEventDetails}>
+        <button id="event-save-button" onClick={handleSaveEventDetails}>
           {event.id ? "Save Event" : "Create Event"}
         </button>
         {onDeleteEvent && (
-          <button onClick={() => onDeleteEvent(event.id)}>Delete Event</button>
+          <button id="event-delete-button" onClick={() => onDeleteEvent(event.id)}>Delete Event</button>
         )}
         <div>
-          <button onClick={onClose}>Cancel</button>
+          <button id="event-cancel-button" onClick={onClose}>Cancel</button>
         </div>
 
         {/* DateTimePicker Modal */}

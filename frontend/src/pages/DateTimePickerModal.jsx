@@ -57,16 +57,16 @@ const DateTimePickerModal = ({ dateTime, onClose, onSave, event, isReminder }) =
       <div className="modal-content">
 
         {/* Dynamic heading based on isReminder */}
-        <h3>
+        <h3 id="modal-heading">
           {isReminder
             ? `Reminder for ${event?.name || 'Untitled Event'}`
             : `Setting Event Time for "${event?.name || 'Untitled Event'}"`}
         </h3>
         {/* Always show the event's current scheduled time */}
-        <p>Event Date: {event?.event_time ? new Date(event.event_time).toLocaleString() : 'None'}</p>
+        <p id="date-subheading">Event Date: {event?.event_time ? new Date(event.event_time).toLocaleString() : 'None'}</p>
 
         {/* Calendar widget */}
-        <Calendar
+        <Calendar id="date-widget"
           value={selectedDate}
           defaultView="month"
           selectRange={false}
@@ -74,15 +74,15 @@ const DateTimePickerModal = ({ dateTime, onClose, onSave, event, isReminder }) =
         />
 
         {/* TimePicker widget */}
-        <TimePicker
+        <TimePicker id="time-widget"
           value={selectedTime}
           onChange={setSelectedTime}
           disableClock
         />
 
         {/* Save and Cancel buttons */}
-        <button onClick={handleSave}>Save</button>
-        <button onClick={onClose}>Cancel</button>
+        <button id="date-save" onClick={handleSave}>Save</button>
+        <button id="date-cancel" onClick={onClose}>Cancel</button>
       </div>
     </div>
   );

@@ -1,10 +1,21 @@
+/* Root and base styles */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  color: #333; /* Default text color for light mode */
+  background-color: #f0f0f0; /* Default background color for light mode */
 }
 
+@media (prefers-color-scheme: dark) {
+  #root {
+    color: #eee; /* Text color for dark mode */
+    background-color: #1a1a1a; /* Background color for dark mode */
+  }
+}
+
+/* Logo styles */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -12,12 +23,13 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #bb86fc); /* Dark mode friendly hover color */
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #61dafb); /* React blue remains good */
 }
 
+/* Animation remains the same */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -33,77 +45,170 @@
   }
 }
 
+/* Card styles */
 .card {
   padding: 2em;
+  background-color: white; /* Default card background */
+  color: #333; /* Default card text */
 }
 
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: #2c2c2c; /* Dark mode card background */
+    color: #eee; /* Dark mode card text */
+  }
+}
+
+/* Read the docs */
 .read-the-docs {
-  color: #888;
+  color: #888; /* Remains neutral */
 }
 
+@media (prefers-color-scheme: dark) {
+  .read-the-docs {
+    color: #bbb; /* Slightly lighter for dark mode */
+  }
+}
+
+/* Plus button */
+/* Plus button */
 .plus-button {
   margin-left: 10px;
   cursor: pointer;
-  color: black;
   font-weight: normal;
   transition: color 0.2s ease-in-out;
 }
 
+/* Default color for light mode (a more visible shade) */
+.plus-button {
+  color: #007bff; /* A standard blue that's generally visible on light backgrounds */
+}
+
+/* Dark mode color */
+@media (prefers-color-scheme: dark) {
+  .plus-button {
+    color: #a7d1ff; /* A lighter blue for better visibility on dark backgrounds */
+  }
+}
+
+.plus-button:hover,
+.plus-button:focus {
+  color: #a7d1ff; /* Hover/focus remains a good contrast */
+}
+
+@media (prefers-color-scheme: dark) {
+  .plus-button:hover,
+  .plus-button:focus {
+    color: #64b5f6; /* Slightly different shade for dark mode hover/focus */
+  }
+}
+
+/* Modal overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black remains good */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
+/* Modal content */
 .modal-content {
-  background: white;
+  background: white; /* Default background */
+  color: #333; /* Default text */
   padding: 20px;
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
   text-align: center;
+  border: 1px solid #ccc; /* Default border */
 }
 
+@media (prefers-color-scheme: dark) {
+  .modal-content {
+    background: #333; /* Dark mode background */
+    color: #eee; /* Dark mode text */
+    border: 1px solid #555; /* Dark mode border */
+  }
+}
+
+/* Form container */
 .form-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* Form row */
 .form-row {
   display: flex;
   gap: 10px;
 }
 
+/* Form label */
 .form-label {
   min-width: 120px;
   text-align: left;
   line-height: 1.5;
   vertical-align: top;
+  color: #333; /* Default label color */
 }
 
+@media (prefers-color-scheme: dark) {
+  .form-label {
+    color: #eee; /* Dark mode label color */
+  }
+}
+
+/* Form input */
 .form-input {
   flex: 1;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Default border */
   border-radius: 4px;
+  color: #333; /* Default input text */
+  background-color: white; /* Default input background */
 }
 
+@media (prefers-color-scheme: dark) {
+  .form-input {
+    border: 1px solid #555; /* Dark mode border */
+    color: #eee; /* Dark mode input text */
+    background-color: #444; /* Dark mode input background */
+  }
+}
+
+/* Form link */
 .form-link {
-  color: blue;
+  color: blue; /* Remains a good contrast color */
   text-decoration: underline;
   cursor: pointer;
   flex: 1;
   text-align: left;
 }
 
+@media (prefers-color-scheme: dark) {
+  .form-link {
+    color: #64b5f6; /* Dark mode friendly link color */
+  }
+}
+
+.event-list, .reminder-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.event-list li, .reminder-list li {
+  list-style-type: none;
+}
+
+
+/* Event list item */
 .event {
   display: flex;
   align-items: center;
@@ -113,6 +218,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 10px;
+  color: #333; /* Default event text */
+}
+
+@media (prefers-color-scheme: dark) {
+  .event {
+    color: #eee; /* Dark mode event text */
+  }
 }
 
 .event span {
@@ -126,19 +238,37 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
+  color: blue; /* Default link color in event */
 }
 
+@media (prefers-color-scheme: dark) {
+  .event a {
+    color: #64b5f6; /* Dark mode link color in event */
+  }
+}
+
+/* React time picker */
 .react-time-picker__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Default border */
   border-radius: 4px;
   padding: 5px 10px;
   box-sizing: border-box;
   width: 100%;
   max-width: 300px;
   gap: 10px;
+  background-color: white; /* Default background */
+  color: #333; /* Default text */
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-time-picker__wrapper {
+    border: 1px solid #555; /* Dark mode border */
+    background-color: #444; /* Dark mode background */
+    color: #eee; /* Dark mode text */
+  }
 }
 
 .react-time-picker__inputGroup {
@@ -148,21 +278,74 @@
   align-items: center;
 }
 
+.react-time-picker__inputGroup__input {
+  color: inherit; /* Inherit text color */
+  background-color: transparent; /* Inherit background */
+  border: none;
+  font: inherit;
+  text-align: center;
+  width: auto;
+}
 
+.react-time-picker__inputGroup__input::placeholder {
+  color: #888; /* Default placeholder */
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-time-picker__inputGroup__input::placeholder {
+    color: #bbb; /* Dark mode placeholder */
+  }
+}
+
+.react-time-picker__inputGroup__separator {
+  color: inherit; /* Inherit text color */
+}
+
+.react-time-picker__button {
+  color: blue; /* Default button color */
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-time-picker__button {
+    color: #64b5f6; /* Dark mode button color */
+  }
+}
+
+/* React calendar */
 .react-calendar {
   max-width: 100%;
-  background: white;
+  background: white; /* Default background */
+  color: #222; /* Default text */
   font-family: 'Arial', 'Helvetica', sans-serif;
+  border: 1px solid #ccc; /* Default border */
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-calendar {
+    background: #333; /* Dark mode background */
+    color: #eee; /* Dark mode text */
+    border: 1px solid #555; /* Dark mode border */
+  }
 }
 
 .react-calendar button {
   margin: 0;
   border: 0;
   outline: none;
+  color: inherit; /* Inherit text color */
+  background: transparent; /* Inherit background */
 }
 
-.react-calendar button:enabled:hover {
-  cursor: pointer;
+.react-calendar button:enabled:hover,
+.react-calendar button:enabled:focus {
+  background-color: #e6e6e6; /* Light hover for light mode */
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-calendar button:enabled:hover,
+  .react-calendar button:enabled:focus {
+    background-color: #555; /* Dark hover for dark mode */
+  }
 }
 
 .react-calendar__navigation {
@@ -174,6 +357,7 @@
 .react-calendar__navigation button {
   min-width: 44px;
   background: none;
+  color: inherit; /* Inherit text color */
 }
 
 .react-calendar__month-view__weekdays,
@@ -197,20 +381,65 @@
   text-align: center;
   font: inherit;
   font-size: 0.833em;
+  color: inherit; /* Inherit text color */
 }
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background-color: #e6e6e6;
+  background-color: #e6e6e6; /* Light hover for light mode */
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus {
+    background-color: #555; /* Dark hover for dark mode */
+  }
 }
 
 .react-calendar__tile--active {
-  background: #006edc;
+  background: #006edc; /* Primary blue */
   color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-calendar__tile--active {
+    background: #64b5f6; /* Dark mode primary blue */
+    color: #222;
+  }
 }
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: #1087ff;
+  background: #1087ff; /* Lighter blue for hover/focus */
 }
 
+@media (prefers-color-scheme: dark) {
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: #90caf9; /* Lighter blue for dark mode hover/focus */
+  }
+}
+
+.react-calendar__tile--now {
+  background: #ffff76; /* Yellow for "today" */
+  color: #222;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-calendar__tile--now {
+    background: #ffeb3b; /* Dark mode yellow for "today" */
+    color: #222;
+  }
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #ffffa9;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-calendar__tile--now:enabled:hover,
+  .react-calendar__tile--now:enabled:focus {
+    background: #f0f08c;
+  }
+}

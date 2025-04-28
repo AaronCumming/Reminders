@@ -131,30 +131,27 @@ export function Home_Events() {
                     setIsInsertMode(true);
                     setSelectedEvent({name: "", event_time: new Date().toISOString()});
                   }}
-                  onMouseEnter={(e) => {
-                    e.target.style.color = 'blue';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = 'black';
-                  }}
             >
             +
             </span>
           </h1>
         </div>
+        <ul className="event-list">
         {Object.keys(groupedEvents).map((date) => (
-            <div key={date}>
-              <h2>{date}</h2>
-              <hr/>
-              {groupedEvents[date].map((event) => (
-                  <div className="event"
-                       key={event.id}
-                  >
-                    <div className="event" key={event.id}>
+            <li>
+              <div key={date}>
+                <h2>{date}</h2>
+                <hr/>
+                {groupedEvents[date].map((event) => (
+
+                    <div className="event"
+                         key={event.id}
+                    >
+                      <div className="event" key={event.id}>
                       <span>
                         {new Date(event.event_time).toLocaleTimeString()}
                       </span>
-                      <span>
+                        <span>
                         <a
                             href="#"
                             onClick={(e) => {
@@ -166,11 +163,13 @@ export function Home_Events() {
                           {event.name}
                         </a>
                       </span>
+                      </div>
                     </div>
-                  </div>
+                  ))}
+              </div>
+            </li>
               ))}
-            </div>
-        ))}
+            </ul>
         {selectedEvent &&
             ReactDOM.createPortal(
                 <EventModal
